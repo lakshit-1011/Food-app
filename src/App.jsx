@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Cart from "./Components/Cart";
-import { BrowserRouter } from "react-router-dom";
+import CheckoutForm from "./Components/CheckoutForm";
 
 const intialState = {
   items: [],
@@ -52,6 +52,8 @@ function cartReducer(state, action) {
 function App() {
   const [state, dispatch] = useReducer(cartReducer, intialState);
   const [visible,setVisible]=useState(false);
+  const [formvisible,setFormvisible]=useState(false);
+
 
   function handleCart(){
     setVisible(!visible);
@@ -59,13 +61,25 @@ function App() {
   function onClose(){
     setVisible(!visible);
   }
+
+  function onForm(){
+    setVisible(!visible);
+    setFormvisible(!formvisible);
+  }
+
+  function cancelHandle(e){
+    e.preventDefault();
+    setVisible(!visible);
+    setFormvisible(!formvisible);
+  }
+
   return (
     <>
      
           <Header cartItems={state.items} handleCart={handleCart} />
           <Meals dispatch={dispatch} />
-          {visible && <Cart dispatch={dispatch} totalItems={state.items} onClose={onClose} />}
-     
+          {visible && <Cart dispatch={dispatch} totalItems={state.items} onClose={onClose} onForm={onForm} />}
+          {formvisible && <CheckoutForm cancelHandle={cancelHandle} />}
     </>
   );
 }
