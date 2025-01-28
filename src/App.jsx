@@ -31,7 +31,7 @@ function cartReducer(state, action) {
   }
 
   if (action.type === "removeCart") {
-    const existingItemId = state.items.findAll(
+    const existingItemId = state.items.findIndex(
       (item) => item.id === action.payload.id
     );
 

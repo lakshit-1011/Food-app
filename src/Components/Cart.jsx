@@ -19,7 +19,7 @@ export default function Cart({ totalItems, onClose,dispatch }) {
           <div className="cart-items text-stone-600 mb-4">
             {totalItems.map((item) => (
               <p className="cart-item" key={item.id}>
-                {item.name} <span><button >-</button>({item.quantity})<button>+</button></span> <span className="text-stone-600">{formater.format(item.price)}</span>
+                {item.name} <span><button onClick={()=>dispatch({type:"removeCart",payload:item})}>-</button>({item.quantity})<button onClick={()=>dispatch({type:"addCart",payload:item})}>+</button></span> <span className="text-stone-600">{formater.format(item.price)}</span>
               </p>
             ))}
           </div>
