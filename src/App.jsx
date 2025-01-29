@@ -3,6 +3,8 @@ import Header from "./Components/Header";
 import Meals from "./Components/Meals";
 import Cart from "./Components/Cart";
 import CheckoutForm from "./Components/CheckoutForm";
+import OrderShip from "./Components/OrderShip";
+import OrderDetails from "./Components/OrderDetails";
 
 const intialState = {
   items: [],
@@ -48,12 +50,17 @@ function cartReducer(state, action) {
     }
     return { ...state, items: updatedItems };
   }
+
+  if(action.type==='empty'){
+     return {...intialState};
+  }
 }
 function App() {
   const [state, dispatch] = useReducer(cartReducer, intialState);
   const [visible,setVisible]=useState(false);
   const [formvisible,setFormvisible]=useState(false);
-
+  const [orderrr,setOrderrr]=useState(false);
+  const [yourOrder,setYourOrder]=useState(false);
 
   function handleCart(){
     setVisible(!visible);
@@ -72,14 +79,36 @@ function App() {
     setVisible(!visible);
     setFormvisible(!formvisible);
   }
+  
+  function order(){
+    // setVisible(!visible);
+    setFormvisible(!formvisible);
+    setOrderrr(!orderrr);
+  }
 
+  function handleDone(){
+    setOrderrr(!orderrr);
+    dispatch({type:'empty'});
+  }
+  
+  function totalOrders(){
+    setYourOrder(!yourOrder);
+  }
+  
+  function handlelastClick(){
+    setYourOrder(!yourOrder);
+  }
+
+  
   return (
     <>
      
-          <Header cartItems={state.items} handleCart={handleCart} />
+          <Header cartItems={state.items} handleCart={handleCart} totalOrders={totalOrders} />
           <Meals dispatch={dispatch} />
           {visible && <Cart dispatch={dispatch} totalItems={state.items} onClose={onClose} onForm={onForm} />}
-          {formvisible && <CheckoutForm cancelHandle={cancelHandle} />}
+          {formvisible && <CheckoutForm cartItems={state.items} order={order} cancelHandle={cancelHandle} handleDone={handleDone}/>}
+          {orderrr && <OrderShip handleDone={handleDone} />}
+          {yourOrder && <OrderDetails handlelastClick={handlelastClick} />}
     </>
   );
 }

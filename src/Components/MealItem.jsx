@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 const formater = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
-export default function MealItem({ meal,dispatch }) {
+export default function MealItem({ meal, dispatch }) {
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  const handleAddToCart = () => {
+    dispatch({ type: "addCart", payload: meal });
+    
+    setIsPopupVisible(true);
+    
+    setTimeout(() => {
+      setIsPopupVisible(false);
+    }, 2000);
+  };
+
   return (
     <li className="meal-item">
       <article>
@@ -19,9 +31,17 @@ export default function MealItem({ meal,dispatch }) {
           <p className="meal-item-description">{meal.description}</p>
         </div>
         <p className="meal-item-actions">
-          <button className="button" onClick={()=>dispatch({type:'addCart',payload:meal})}>Add to Cart</button>
+          <button className="button" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
         </p>
       </article>
+
+      {isPopupVisible && (
+        <div className="popup-notification">
+          <p>1 item added to cart!</p>
+        </div>
+      )}
     </li>
   );
 }
